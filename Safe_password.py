@@ -2,7 +2,7 @@ import streamlit as st
 import random
 import string
 import secrets
-import qrcode
+#import qrcode
 from PIL import Image
 
 # Function to generate a random string of lowercase letters of given length
