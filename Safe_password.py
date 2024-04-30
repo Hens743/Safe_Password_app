@@ -23,19 +23,19 @@ def calculate_entropy(length, include_letters=True, include_digits=True, include
     
     N = len(characters)
     entropy = math.log2(N ** length)
-    return entropy
+    return round(entropy)
 
 def estimate_strength(entropy):
     if entropy < 28:
-        return "Very Weak"
+        return "Very Weak", "red"
     elif entropy < 56:
-        return "Weak"
+        return "Weak", "orange"
     elif entropy < 84:
-        return "Moderate"
+        return "Moderate", "yellow"
     elif entropy < 112:
-        return "Strong"
+        return "Strong", "lightgreen"
     else:
-        return "Very Strong"
+        return "Very Strong", "green"
 
 def generate_password(length, include_letters=True, include_digits=True, include_punctuation=True, include_specials=False, include_scandinavian=False, include_icelandic=False):
     characters = ""
@@ -74,8 +74,10 @@ if st.button("Generate Password"):
     entropy = calculate_entropy(length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
     password = generate_password(length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
     if password:
-        strength = estimate_strength(entropy)
-        st.success(f"Generated Password: {password}\nStrength: {strength}\nEntropy: {entropy} bits")
+        strength, color = estimate_strength(entropy)
+        st.success(f"Generated Password: {password}")
+        st.markdown(f"<div style='background-color: {color}'>Strength: {strength}</div>", unsafe_allow_html=True)
+        st.info(f"Entropy: {entropy} bits")
 
 # Recommended guidelines
 st.sidebar.markdown("### Common Guidelines")
@@ -86,6 +88,5 @@ st.sidebar.markdown("""
 - Avoid character repetition, keyboard patterns, dictionary words, and sequential letters or numbers.
 - Avoid using information that is or might become publicly associated with the user or the account, such as the user name, ancestors' names, or dates.
 - Avoid using information that the user's colleagues and/or acquaintances might know to be associated with the user, such as relatives or pet names, romantic links (current or past), and biographical information (e.g. ID numbers, ancestors' names or dates).
-- Do not use passwords that consist wholly of any simple combination of the aforementioned weak components. 
-Source (https://en.wikipedia.org/wiki/Password_strength)
+- Do not use passwords that consist wholly of any simple combination of the aforementioned weak components.
 """)
