@@ -2,7 +2,8 @@ import streamlit as st
 import secrets
 import string
 import math
-import qrcode
+from PIL import Image, ImageDraw
+from pyqrcode import QRCode
 
 def calculate_entropy(length, include_letters=True, include_digits=True, include_punctuation=True, include_specials=False, include_scandinavian=False, include_icelandic=False):
     characters = ""
@@ -61,17 +62,11 @@ def generate_password(length, include_letters=True, include_digits=True, include
     return password
 
 def display_qr_code(data):
-    qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=10,
-        border=4,
-    )
-    qr.add_data(data)
-    qr.make(fit=True)
-
-    img = qr.make_image(fill_color="black", back_color="white")
-    st.image(img, caption="QR Code", use_column_width=True)
+    qr = QRCode(data)
+    qr_img = qr.make_image(fill_color="black", back_color="white")
+    img_byte_arr = io.BytesIO()
+    qr_img.save(img_byte_arr, format='PNG')
+    st.image(img_byte_arr, use_column_width=True)
 
 st.title("Secure Password Generator")
 
