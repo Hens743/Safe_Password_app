@@ -27,15 +27,15 @@ def calculate_entropy(length, include_letters=True, include_digits=True, include
 
 def estimate_strength(entropy):
     if entropy < 28:
-        return "Very Weak", "red"
+        return "Very Weak"
     elif entropy < 56:
-        return "Weak", "orange"
+        return "Weak"
     elif entropy < 84:
-        return "Moderate", "yellow"
+        return "Moderate"
     elif entropy < 112:
-        return "Strong", "lightgreen"
+        return "Strong"
     else:
-        return "Very Strong", "green"
+        return "Very Strong"
 
 def generate_password(length, include_letters=True, include_digits=True, include_punctuation=True, include_specials=False, include_scandinavian=False, include_icelandic=False):
     characters = ""
@@ -74,10 +74,9 @@ if st.button("Generate Password"):
     entropy = calculate_entropy(length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
     password = generate_password(length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
     if password:
-        strength, color = estimate_strength(entropy)
-        st.success(f"Generated Password: {password}")
-        st.markdown(f"<div style='background-color: {color}'>Strength: {strength}</div>", unsafe_allow_html=True)
-        st.info(f"Entropy: {entropy} bits")
+        strength = estimate_strength(entropy)
+        data = {"Generated Password": password, "Strength": strength, "Entropy (bits)": entropy}
+        st.table(data)
 
 # Recommended guidelines
 st.sidebar.markdown("### Common Guidelines")
