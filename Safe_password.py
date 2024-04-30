@@ -75,7 +75,7 @@ if st.button("Generate Password"):
     password = generate_password(length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
     if password:
         strength = estimate_strength(entropy)
-        data = {"Generated Password": password, "Strength": strength, "Entropy (bits)": entropy}
+        data = {"Generated Password": [password], "Strength": [strength], "Entropy (bits)": [entropy]}
         st.table(data)
 
 # Recommended guidelines
