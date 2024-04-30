@@ -3,7 +3,7 @@ import secrets
 import string
 import math
 from PIL import Image, ImageDraw
-from qrcode import QRCode
+import qrcode
 
 def calculate_entropy(length, include_letters=True, include_digits=True, include_punctuation=True, include_specials=False, include_scandinavian=False, include_icelandic=False):
     characters = ""
@@ -62,7 +62,7 @@ def generate_password(length, include_letters=True, include_digits=True, include
     return password
 
 def display_qr_code(data):
-    qr = QRCode(data)
+    qr = qrcode(data)
     qr_img = qr.make_image(fill_color="black", back_color="white")
     img_byte_arr = io.BytesIO()
     qr_img.save(img_byte_arr, format='PNG')
