@@ -130,9 +130,13 @@ get_string(6, 2)
 import secrets
 print("Secure hexadecimal string token", secrets.token_hex(32))
 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ### Generate universally unique secure random string Id
 
 The random string generated using a UUID module is suitable for the Cryptographically secure application. The UUID module has various functions to do this. Here in this example, we are using a uuid4() function to generate a random string Id.
+It generates universally unique identifiers (UUIDs)
+
+UUIDs are standardized 128-bit identifiers that are guaranteed to be unique across both space and time. They are commonly represented as a 32-character hexadecimal string, usually formatted with hyphens to separate the components (e.g., 0682042d-318e-45bf-8a16-6cc763dc8806).
 
 import uuid
 stringId  = uuid.uuid4()
@@ -153,6 +157,7 @@ print(random_str2)
 # output "C01N=10
 # Output 0682042d-318e-45bf-8a16-6cc763dc8806
 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ### 2 Pure python QR Code generator ###
 pip install qrcode
 
