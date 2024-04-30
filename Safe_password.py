@@ -2,6 +2,7 @@ import streamlit as st
 import secrets
 import string
 import math
+import qrcode
 
 def calculate_entropy(length, include_letters=True, include_digits=True, include_punctuation=True, include_specials=False, include_scandinavian=False, include_icelandic=False):
     characters = ""
@@ -59,6 +60,19 @@ def generate_password(length, include_letters=True, include_digits=True, include
     password = ''.join((secrets.choice(characters) for _ in range(length)))
     return password
 
+def display_qr_code(data):
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    qr.add_data(data)
+    qr.make(fit=True)
+
+    img = qr.make_image(fill_color="black", back_color="white")
+    st.image(img, caption="QR Code", use_column_width=True)
+
 st.title("Secure Password Generator")
 
 # Options for generating the password
@@ -70,6 +84,7 @@ include_specials = st.checkbox("Include Special Characters", value=False)
 include_scandinavian = st.checkbox("Include Scandinavian Characters", value=False)
 include_icelandic = st.checkbox("Include Icelandic Characters", value=False)
 hide_password = st.checkbox("Hide Password", value=False)
+show_qr_code = st.checkbox("Show QR Code", value=False)
 
 if st.button("Generate Password"):
     entropy = calculate_entropy(length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
@@ -77,9 +92,15 @@ if st.button("Generate Password"):
     if password:
         strength = estimate_strength(entropy)
         if hide_password:
-            password = "*" * len(password)
-        data = {"Generated Password": password, "Strength": strength, "Entropy (bits)": entropy}
+            password_display = "*" * len(password)
+        else:
+            password_display = password
+        
+        data = {"Generated Password": password_display, "Strength": strength, "Entropy (bits)": entropy}
         st.table(data)
+        
+        if show_qr_code:
+            display_qr_code(password)
 
 # Recommended guidelines
 st.sidebar.markdown("### Common Guidelines")
