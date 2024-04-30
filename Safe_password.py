@@ -3,7 +3,7 @@ import secrets
 import string
 import math
 from PIL import Image, ImageDraw
-from pyqrcode import QRCode
+from qrcode import QRCode
 
 def calculate_entropy(length, include_letters=True, include_digits=True, include_punctuation=True, include_specials=False, include_scandinavian=False, include_icelandic=False):
     characters = ""
