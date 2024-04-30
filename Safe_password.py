@@ -69,12 +69,15 @@ include_punctuation = st.checkbox("Include Punctuation", value=True)
 include_specials = st.checkbox("Include Special Characters", value=False)
 include_scandinavian = st.checkbox("Include Scandinavian Characters", value=False)
 include_icelandic = st.checkbox("Include Icelandic Characters", value=False)
+hide_password = st.checkbox("Hide Password", value=False)
 
 if st.button("Generate Password"):
     entropy = calculate_entropy(length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
     password = generate_password(length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
     if password:
         strength = estimate_strength(entropy)
+        if hide_password:
+            password = "*" * len(password)
         data = {"Generated Password": password, "Strength": strength, "Entropy (bits)": entropy}
         st.table(data)
 
