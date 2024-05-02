@@ -2,6 +2,7 @@ import streamlit as st
 import secrets
 import string
 import math
+import qrcode
 
 def calculate_entropy(length, include_letters=True, include_digits=True, include_punctuation=True, include_specials=False, include_scandinavian=False, include_icelandic=False):
     characters = ""
@@ -80,6 +81,10 @@ if st.button("Generate Password"):
             password = "*" * len(password)
         data = {"Generated Password": password, "Strength": strength, "Entropy (bits)": entropy}
         st.table(data)
+
+        # Generate QR Code 
+        img = qrcode.make(password) 
+        st.image(img)  # Display the QR code
 
 # Recommended guidelines
 st.sidebar.markdown("### Common Guidelines")
