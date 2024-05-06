@@ -72,10 +72,19 @@ hide_password = st.checkbox("Hide Password", value=False)
 show_qr_code = st.checkbox("Show QR Code", value=False)
 
 if st.button("Generate Password"):
-    character_set = "".join(set for set in 
-                            [LETTERS, DIGITS, PUNCTUATION, SPECIALS, SCANDINAVIAN, ICELANDIC]
-                            if set in (include_letters, include_digits, include_punctuation,
-                                      include_specials, include_scandinavian, include_icelandic))
+    character_set = ""
+    if include_letters:
+        character_set += LETTERS
+    if include_digits:
+        character_set += DIGITS
+    if include_punctuation:
+        character_set += PUNCTUATION
+    if include_specials:
+        character_set += SPECIALS
+    if include_scandinavian:
+        character_set += SCANDINAVIAN
+    if include_icelandic:
+        character_set += ICELANDIC
 
     entropy = calculate_entropy(length, character_set)
     password = generate_password(length, character_set)
@@ -95,4 +104,4 @@ if st.button("Generate Password"):
 
 # Recommended guidelines (Sidebar)
 st.sidebar.markdown("### Common Guidelines")
-# ... (Your guidelines text) 
+# ... (Your guidelines text)
