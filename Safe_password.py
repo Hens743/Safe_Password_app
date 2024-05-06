@@ -1,4 +1,3 @@
-
 import streamlit as st
 import secrets
 import string
@@ -87,7 +86,7 @@ if st.button("Generate Password"):
         data = {"Generated Password": password_display, "Strength": strength, "Entropy (bits)": entropy}
         st.table(data)
         if display_qr_code:
-            qr = qrcode.QRCode(version=1, box_size=5, border=5)
+            qr = qrcode.QRCode(version=1, box_size=10, border=5)
             qr.add_data(password)
             qr.make(fit=True)
             img = qr.make_image(fill_color="black", back_color="white")
@@ -106,4 +105,3 @@ st.sidebar.markdown("""
 - Avoid using information that the user's colleagues and/or acquaintances might know to be associated with the user, such as relatives or pet names, romantic links (current or past), and biographical information (e.g. ID numbers, ancestors' names or dates).
 - Do not use passwords that consist wholly of any simple combination of the aforementioned weak components.
 """)
-
