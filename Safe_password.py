@@ -67,7 +67,7 @@ st.title("Secure password generator with QR code")
 length = st.number_input("Length of password", min_value=1, value=8, step=1)
 
 # Arrange the first three checkboxes on the left and the last three on the right
-col1, col2 = st.columns([2, 1])
+col1, col2 = st.columns([1, 2])
 with col1:
     include_letters = st.checkbox("Include letters", value=True)
     include_digits = st.checkbox("Include digits", value=True)
