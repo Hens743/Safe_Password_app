@@ -61,7 +61,7 @@ def generate_password(length, include_letters=True, include_digits=True, include
     password = ''.join((secrets.choice(characters) for _ in range(length)))
     return password
 
-st.title("Secure Password Generator")
+st.title("Secure password generator with QR code")
 
 # Options for generating the password
 length = st.number_input("Length of Password", min_value=1, value=8, step=1)
@@ -75,7 +75,7 @@ st.title ("Results")
 hide_password = st.checkbox("Hide Password", value=False)
 display_qr_code = st.checkbox("Display as QR Code", value=False)
 
-if st.button("Generate Password"):
+if st.button("Generate password"):
     entropy = calculate_entropy(length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
     password = generate_password(length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
     if password:
@@ -84,7 +84,7 @@ if st.button("Generate Password"):
             password_display = "*" * len(password)
         else:
             password_display = password
-        data = {"Generated Password": password_display, "Strength": strength, "Entropy (bits)": entropy}
+        data = {"Generated password": password_display, "Strength": strength, "Entropy (bits)": entropy}
         st.table(data)
         if display_qr_code:
             qr = qrcode.QRCode(version=1, box_size=10, border=5)
