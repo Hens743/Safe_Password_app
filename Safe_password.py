@@ -3,6 +3,7 @@ import secrets
 import string
 import math
 import qrcode
+from io import BytesIO
 
 def calculate_entropy(length, include_letters=True, include_digits=True, include_punctuation=True, include_specials=False, include_scandinavian=False, include_icelandic=False):
     characters = ""
@@ -89,7 +90,9 @@ if st.button("Generate Password"):
             qr.add_data(password)
             qr.make(fit=True)
             img = qr.make_image(fill_color="black", back_color="white")
-            st.image(img, caption="Password QR Code", use_column_width=True)
+            img_bytes = BytesIO()
+            img.save(img_bytes, format='PNG')
+            st.image(img_bytes, caption="Password QR Code", use_column_width=True)
 
 # Recommended guidelines
 st.sidebar.markdown("### Common Guidelines")
