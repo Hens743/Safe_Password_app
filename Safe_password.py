@@ -71,7 +71,7 @@ include_punctuation = st.checkbox("Include Punctuation", value=True)
 include_specials = st.checkbox("Include Special Characters", value=False)
 include_scandinavian = st.checkbox("Include Scandinavian Characters", value=False)
 include_icelandic = st.checkbox("Include Icelandic Characters", value=False)
-Results = st.title
+st.title ("Results")
 hide_password = st.checkbox("Hide Password", value=False)
 display_qr_code = st.checkbox("Display as QR Code", value=False)
 
