@@ -1,3 +1,6 @@
+Got it! Here's the modified code with buttons styled according to the strength of the password length:
+
+```python
 import streamlit as st
 import secrets
 import string
@@ -65,7 +68,7 @@ st.title("Secure password generator with QR code")
 
 # Predefined numbers with preselected buttons
 st.subheader("Select a pre-defined password length:")
-selected_length = st.radio("", [5, 8, 10, 12, 15])
+selected_length = st.radio("", ["5", "8", "10", "12", "15"])
 
 # Option to enter a custom number
 custom_length = st.text_input("Or enter a custom password length:")
@@ -74,7 +77,34 @@ custom_length = st.text_input("Or enter a custom password length:")
 if custom_length:
     length = int(custom_length)
 else:
-    length = selected_length
+    length = int(selected_length)
+
+# Color-coded buttons based on strength
+st.markdown("#### Password Strength:")
+if length < 8:
+    button_color = "red"
+elif length < 10:
+    button_color = "orange"
+elif length < 12:
+    button_color = "yellow"
+elif length < 15:
+    button_color = "green"
+else:
+    button_color = "blue"
+
+button_styles = {
+    "color": "white",
+    "background-color": button_color,
+    "border-radius": "10px",
+    "padding": "10px 20px",
+    "font-size": "16px"
+}
+
+button_5 = st.button("5", key="button_5", style=button_styles)
+button_8 = st.button("8", key="button_8", style=button_styles)
+button_10 = st.button("10", key="button_10", style=button_styles)
+button_12 = st.button("12", key="button_12", style=button_styles)
+button_15 = st.button("15", key="button_15", style=button_styles)
 
 # Arrange the first three checkboxes on the left and the last three on the right
 col1, col2 = st.columns([1, 2])
@@ -119,7 +149,8 @@ st.sidebar.markdown("""
 - Avoid using the same password twice (e.g. across multiple user accounts and/or software systems).
 - Avoid character repetition, keyboard patterns, dictionary words, and sequential letters or numbers.
 - Avoid using information that is or might become publicly associated with the user or the account, such as the user name, ancestors' names, or dates.
-- Avoid using information that the user's colleagues and/or acquaintances might know to be associated with the user, such as relatives or pet names, romantic links (current or past), and biographical information (e.g. ID numbers, ancestors' names or dates).
+- Avoid using information that the user's colleagues and/or acquaintances might know to be associated with the user, such as relatives or pet names, romantic links (current or past), and biographical information (e
+
+.g. ID numbers, ancestors' names or dates).
 - Do not use passwords that consist wholly of any simple combination of the aforementioned weak components.
 """)
-
