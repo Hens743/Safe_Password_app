@@ -63,9 +63,18 @@ def generate_password(length, include_letters=True, include_digits=True, include
 
 st.title("Secure password generator with QR code")
 
-# Predefined numbers before the "Length of password" input
-predefined_numbers = [5, 8, 10, 12, 15]
-length = st.multiselect("Choose a preselected lenght or indicate the length of password in the following box (8 by default)", predefined_numbers, default=8)
+# Predefined numbers with preselected buttons
+st.subheader("Select a pre-defined password length:")
+selected_length = st.radio("", [5, 8, 10, 12, 15])
+
+# Option to enter a custom number
+custom_length = st.text_input("Or enter a custom password length:")
+
+# Choose between selected or custom length
+if custom_length:
+    length = int(custom_length)
+else:
+    length = selected_length
 
 # Arrange the first three checkboxes on the left and the last three on the right
 col1, col2 = st.columns([1, 2])
@@ -83,8 +92,6 @@ hide_password = st.checkbox("Hide password", value=False)
 display_qr_code = st.checkbox("Display as QR code", value=False)
 
 if st.button("Generate password"):
-    # Extracting the selected length from the multiselect
-    length = int(length[0])
     entropy = calculate_entropy(length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
     password = generate_password(length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
     if password:
@@ -115,3 +122,4 @@ st.sidebar.markdown("""
 - Avoid using information that the user's colleagues and/or acquaintances might know to be associated with the user, such as relatives or pet names, romantic links (current or past), and biographical information (e.g. ID numbers, ancestors' names or dates).
 - Do not use passwords that consist wholly of any simple combination of the aforementioned weak components.
 """)
+
