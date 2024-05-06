@@ -64,16 +64,16 @@ def generate_password(length, include_letters=True, include_digits=True, include
 st.title("Secure password generator with QR code")
 
 # Options for generating the password
-length = st.number_input("Length of Password", min_value=1, value=8, step=1)
-include_letters = st.checkbox("Include Letters", value=True)
-include_digits = st.checkbox("Include Digits", value=True)
-include_punctuation = st.checkbox("Include Punctuation", value=True)
-include_specials = st.checkbox("Include Special Characters", value=False)
-include_scandinavian = st.checkbox("Include Scandinavian Characters", value=False)
-include_icelandic = st.checkbox("Include Icelandic Characters", value=False)
+length = st.number_input("Length of password", min_value=1, value=8, step=1)
+include_letters = st.checkbox("Include letters", value=True)
+include_digits = st.checkbox("Include digits", value=True)
+include_punctuation = st.checkbox("Include punctuation", value=True)
+include_specials = st.checkbox("Include special characters", value=False)
+include_scandinavian = st.checkbox("Include Scandinavian characters", value=False)
+include_icelandic = st.checkbox("Include Icelandic characters", value=False)
 st.title ("Results")
-hide_password = st.checkbox("Hide Password", value=False)
-display_qr_code = st.checkbox("Display as QR Code", value=False)
+hide_password = st.checkbox("Hide password", value=False)
+display_qr_code = st.checkbox("Display as QR code", value=False)
 
 if st.button("Generate password"):
     entropy = calculate_entropy(length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
@@ -96,7 +96,7 @@ if st.button("Generate password"):
             st.image(img_bytes, caption="Password QR Code", use_column_width=True)
 
 # Recommended guidelines
-st.sidebar.markdown("### Common Guidelines")
+st.sidebar.markdown("### Common guidelines")
 st.sidebar.markdown("""
 - Consider a minimum password length of 8 characters as a general guide. Both the US and UK cyber security departments recommend long and easily memorable passwords over short complex ones.
 - Generate passwords randomly where feasible.
