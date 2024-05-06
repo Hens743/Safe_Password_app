@@ -1,6 +1,3 @@
-Got it! Here's the modified code with buttons styled according to the strength of the password length:
-
-```python
 import streamlit as st
 import secrets
 import string
@@ -149,8 +146,6 @@ st.sidebar.markdown("""
 - Avoid using the same password twice (e.g. across multiple user accounts and/or software systems).
 - Avoid character repetition, keyboard patterns, dictionary words, and sequential letters or numbers.
 - Avoid using information that is or might become publicly associated with the user or the account, such as the user name, ancestors' names, or dates.
-- Avoid using information that the user's colleagues and/or acquaintances might know to be associated with the user, such as relatives or pet names, romantic links (current or past), and biographical information (e
-
-.g. ID numbers, ancestors' names or dates).
+- Avoid using information that the user's colleagues and/or acquaintances might know to be associated with the user, such as relatives or pet names, romantic links (current or past), and biographical information (e.g. ID numbers, ancestors' names or dates).
 - Do not use passwords that consist wholly of any simple combination of the aforementioned weak components.
 """)
