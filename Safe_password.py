@@ -64,17 +64,17 @@ def generate_password(length, include_letters=True, include_digits=True, include
 st.title("Secure Password Generator")
 
 # Options for generating the password
-length = st.number_input("Length of Password", min_value=1, value=8, step=1)
-include_letters = st.checkbox("Include Letters", value=True)
-include_digits = st.checkbox("Include Digits", value=True)
-include_punctuation = st.checkbox("Include Punctuation", value=True)
-include_specials = st.checkbox("Include Special Characters", value=False)
-include_scandinavian = st.checkbox("Include Scandinavian Characters", value=False)
-include_icelandic = st.checkbox("Include Icelandic Characters", value=False)
-hide_password = st.checkbox("Hide Password", value=False)
-display_qr_code = st.checkbox("Display as QR Code", value=False)
+st.sidebar.title("Criteria Selection")
+length = st.sidebar.number_input("Length of Password", min_value=1, value=8, step=1)
+include_letters = st.sidebar.checkbox("Include Letters", value=True)
+include_digits = st.sidebar.checkbox("Include Digits", value=True)
+include_punctuation = st.sidebar.checkbox("Include Punctuation", value=True)
+include_specials = st.sidebar.checkbox("Include Special Characters", value=False)
+include_scandinavian = st.sidebar.checkbox("Include Scandinavian Characters", value=False)
+include_icelandic = st.sidebar.checkbox("Include Icelandic Characters", value=False)
+hide_password = st.sidebar.checkbox("Hide Password", value=False)
 
-if st.button("Generate Password"):
+if st.sidebar.button("Generate Password"):
     entropy = calculate_entropy(length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
     password = generate_password(length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
     if password:
@@ -84,6 +84,7 @@ if st.button("Generate Password"):
         else:
             password_display = password
         data = {"Generated Password": password_display, "Strength": strength, "Entropy (bits)": entropy}
+        st.title("Results")
         st.table(data)
         if display_qr_code:
             qr = qrcode.QRCode(version=1, box_size=10, border=5)
@@ -95,7 +96,7 @@ if st.button("Generate Password"):
             st.image(img_bytes, caption="Password QR Code", use_column_width=True)
 
 # Recommended guidelines
-st.sidebar.markdown("### Common Guidelines")
+st.sidebar.title("Common Guidelines")
 st.sidebar.markdown("""
 - Consider a minimum password length of 8 characters as a general guide. Both the US and UK cyber security departments recommend long and easily memorable passwords over short complex ones.
 - Generate passwords randomly where feasible.
