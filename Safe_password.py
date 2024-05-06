@@ -63,17 +63,24 @@ def generate_password(length, include_letters=True, include_digits=True, include
 
 st.title("Secure password generator with QR code")
 
-# Options for generating the password
-length = st.number_input("Length of password", min_value=1, value=8, step=1)
-include_letters = st.checkbox("Include letters", value=True)
-include_digits = st.checkbox("Include digits", value=True)
-include_punctuation = st.checkbox("Include punctuation", value=True)
-include_specials = st.checkbox("Include special characters", value=False)
-include_scandinavian = st.checkbox("Include Scandinavian characters", value=False)
-include_icelandic = st.checkbox("Include Icelandic characters", value=False)
-st.title ("Results")
-hide_password = st.checkbox("Hide password", value=False)
-display_qr_code = st.checkbox("Display as QR code", value=False)
+# Criteria selection
+col1, col2 = st.columns(2)
+
+with col1:
+    length = st.number_input("Length of password", min_value=1, value=8, step=1)
+    include_letters = st.checkbox("Include letters", value=True)
+    include_digits = st.checkbox("Include digits", value=True)
+    include_punctuation = st.checkbox("Include punctuation", value=True)
+
+with col2:
+    include_specials = st.checkbox("Include special characters", value=False)
+    include_scandinavian = st.checkbox("Include Scandinavian characters", value=False)
+    include_icelandic = st.checkbox("Include Icelandic characters", value=False)
+    hide_password = st.checkbox("Hide password", value=False)
+    display_qr_code = st.checkbox("Display as QR code", value=False)
+
+# Results
+col3, col4 = st.columns(2)
 
 if st.button("Generate password"):
     entropy = calculate_entropy(length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
@@ -85,15 +92,18 @@ if st.button("Generate password"):
         else:
             password_display = password
         data = {"Generated password": password_display, "Strength": strength, "Entropy (bits)": entropy}
-        st.table(data)
-        if display_qr_code:
-            qr = qrcode.QRCode(version=1, box_size=10, border=5)
-            qr.add_data(password)
-            qr.make(fit=True)
-            img = qr.make_image(fill_color="black", back_color="white")
-            img_bytes = BytesIO()
-            img.save(img_bytes, format='PNG')
-            st.image(img_bytes, caption="Password QR Code", use_column_width=True)
+        with col3:
+            st.title("Results")
+            st.table(data)
+        with col4:
+            if display_qr_code:
+                qr = qrcode.QRCode(version=1, box_size=10, border=5)
+                qr.add_data(password)
+                qr.make(fit=True)
+                img = qr.make_image(fill_color="black", back_color="white")
+                img_bytes = BytesIO()
+                img.save(img_bytes, format='PNG')
+                st.image(img_bytes, caption="Password QR Code", use_column_width=True)
 
 # Recommended guidelines
 st.sidebar.markdown("### Common guidelines")
