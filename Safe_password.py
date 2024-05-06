@@ -3,26 +3,6 @@ import secrets
 import string
 import math
 import qrcode
-from qrcode.image.pil import PilImage
-from PIL import Image
-import io
-import base64
-from urllib.parse import urlparse
-
-# Function to convert image to base64
-def get_image_as_base64(image: Image):
-    buffer = io.BytesIO()
-    image.save(buffer, format="PNG")
-    image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
-    return image_base64
-
-def get_url_filename(url):
-    parsed_uri = urlparse(url)
-    domain = '{uri.netloc}'.format(uri=parsed_uri)
-    main_domain = domain.split('.')
-    main_domain = main_domain[1] if main_domain[0] == 'www' else main_domain[0]
-    path = parsed_uri.path.strip('/').replace('/', '_')
-    return f"{main_domain}_{path}" if path else main_domain
 
 def calculate_entropy(length, include_letters=True, include_digits=True, include_punctuation=True, include_specials=False, include_scandinavian=False, include_icelandic=False):
     characters = ""
@@ -90,15 +70,10 @@ def display_qr_code(data):
     qr.add_data(data)
     qr.make(fit=True)
 
-    img = qr.make_image(fill_color="black", back_color="white", image_factory=PilImage)
-    img_bytes = io.BytesIO()
-    img.save(img_bytes, format='PNG')
-    img_bytes.seek(0)
-    img_base64 = base64.b64encode(img_bytes.getvalue()).decode()
-    return img_base64
+    img = qr.make_image(fill_color="black", back_color="white")
+    st.image(img, caption="QR Code", use_column_width=True)
 
-# Streamlit app title
-st.title("Secure Password Generator with QR Code")
+st.title("Secure Password Generator")
 
 # Options for generating the password
 length = st.number_input("Length of Password", min_value=1, value=8, step=1)
@@ -125,9 +100,7 @@ if st.button("Generate Password"):
         st.table(data)
         
         if show_qr_code:
-            qr_code_base64 = display_qr_code(password)
-            qr_code_html = f'<img src="data:image/png;base64,{qr_code_base64}" alt="QR Code">'
-            st.markdown(qr_code_html, unsafe_allow_html=True)
+            display_qr_code(password)
 
 # Recommended guidelines
 st.sidebar.markdown("### Common Guidelines")
