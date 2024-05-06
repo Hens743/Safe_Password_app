@@ -65,7 +65,7 @@ st.title("Secure password generator with QR code")
 
 # Predefined numbers before the "Length of password" input
 predefined_numbers = [5, 8, 10, 12, 15]
-length = st.multiselect("Choose a preselected lenght or indicate the length of password in the following box", predefined_numbers, default=8)
+length = st.multiselect("Choose a preselected lenght or indicate the length of password in the following box (8 by default)", predefined_numbers, default=8)
 
 # Arrange the first three checkboxes on the left and the last three on the right
 col1, col2 = st.columns([1, 2])
