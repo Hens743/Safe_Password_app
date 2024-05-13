@@ -65,7 +65,7 @@ def generate_password(length, include_letters=True, include_digits=True, include
     password = ''.join((secrets.choice(characters) for _ in range(length)))
     return password
 
-st.title("Secure password generator with QR code (NO/SE/IC + Sami)")
+st.title("Secure password generator with QR code (NO/SE/FI/IC + Sami)")
 
 # Options for generating the password
 length = st.number_input("Length of password", min_value=1, value=8, step=1)
