@@ -19,6 +19,8 @@ def calculate_entropy(length, include_letters=True, include_digits=True, include
         characters += "åäöÅÄÖåÅäÄöÖøØæÆ"  # Scandinavian characters
     if include_icelandic:
         characters += "áÁðÐéÉíÍóÓúÚýÝþÞ"  # Icelandic characters
+    if include_sami:
+        characters += "ÁáĐđŊŋŠšŽžÅåÄäÖö"  # Sami characters
     
     if not characters:
         return 0
@@ -53,6 +55,8 @@ def generate_password(length, include_letters=True, include_digits=True, include
         characters += "åäöÅÄÖåÅäÄöÖøØæÆ"  # Scandinavian characters
     if include_icelandic:
         characters += "áÁðÐéÉíÍóÓúÚýÝþÞ"  # Icelandic characters
+    if include_sami:
+        characters += "ÁáĐđŊŋŠšŽžÅåÄäÖö"  # Sami characters
     
     if not characters:
         st.error("Please select at least one character type.")
@@ -76,6 +80,7 @@ with col2:
     include_specials = st.checkbox("Include special characters", value=False)
     include_scandinavian = st.checkbox("Include Scandinavian characters", value=False)
     include_icelandic = st.checkbox("Include Icelandic characters", value=False)
+    include_sami = st.checkbox("Include Sami characters", value=False)
 
 st.title ("Results")
 hide_password = st.checkbox("Hide password", value=False)
