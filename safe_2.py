@@ -124,7 +124,7 @@ if st.button("Generate password"):
             st.image(img_bytes, caption="Password QR Code", use_column_width=True)
 
 # Recommended guidelines
-st.sidebar.markdown("### Common guidelines")
+st.sidebar.markdown("Common guidelines")
 st.sidebar.markdown("""
 - Consider a minimum password length of 8 characters as a general guide. Both the US and UK cyber security departments recommend long and easily memorable passwords over short complex ones.
 - Generate passwords randomly where feasible.
@@ -134,9 +134,3 @@ st.sidebar.markdown("""
 - Avoid using information that the user's colleagues and/or acquaintances might know to be associated with the user, such as relatives or pet names, romantic links (current or past), and biographical information (e.g. ID numbers, ancestors' names or dates).
 - Do not use passwords that consist wholly of any simple combination of the aforementioned weak components.
 """)
-
-### Explanation of Changes:
-1. **Checkbox `use_input_words`**: Adds an option for using input words.
-2. **Text Input `input_words`**: Only visible if `use_input_words` is selected, where users can enter their own words.
-3. **`create_password_from_words` Function**: Joins the words entered by the user into a single string to form the password.
-4. **Conditional Password Generation**: Uses input words if `use_input_words` is checked; otherwise, it generates a random password.
