@@ -146,12 +146,8 @@ def generate_and_display_password():
         img.save(img_bytes, format='PNG')
         st.image(img_bytes, caption="Password QR Code", use_column_width=True)
 
-# Generate Password button
+# Generate Password button (also serves as "Regenerate" button)
 if st.button("Generate password"):
-    generate_and_display_password()
-
-# Regenerate button
-if st.button("Regenerate"):
     generate_and_display_password()
 
 # Copy to clipboard button (JavaScript snippet to copy password)
