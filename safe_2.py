@@ -134,7 +134,6 @@ st.sidebar.markdown("""
 - Avoid using information that the user's colleagues and/or acquaintances might know to be associated with the user, such as relatives or pet names, romantic links (current or past), and biographical information (e.g. ID numbers, ancestors' names or dates).
 - Do not use passwords that consist wholly of any simple combination of the aforementioned weak components.
 """)
-```
 
 ### Explanation of Changes:
 1. **Checkbox `use_input_words`**: Adds an option for using input words.
