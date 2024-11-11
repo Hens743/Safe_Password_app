@@ -4,6 +4,7 @@ import string
 import math
 import qrcode
 from io import BytesIO
+import seaborn as sns
 import matplotlib.pyplot as plt
 
 def calculate_entropy(length, include_letters=True, include_digits=True, include_punctuation=True, include_specials=False, include_scandinavian=False, include_icelandic=False):
@@ -77,13 +78,13 @@ def display_entropy_graph(entropy):
     }
     color = color_map.get(strength, "gray")
     
-    # Plot the entropy score
+    # Plot using Seaborn
+    sns.set(style="whitegrid")
     fig, ax = plt.subplots(figsize=(6, 3))
-    ax.barh(['Entropy'], [entropy], color=color)
-    ax.set_xlim(0, 128)  # Set x-axis limit based on entropy range
+    sns.barplot(x=[entropy], y=["Entropy"], palette=[color], ax=ax)
+    ax.set_xlim(0, 128)
     ax.set_xlabel("Entropy Score (bits)")
     ax.set_title(f"Password Strength: {strength}")
-    ax.grid(True, axis='x', linestyle='--', alpha=0.7)
 
     st.pyplot(fig)
 
