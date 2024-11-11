@@ -67,7 +67,6 @@ def generate_password(length, include_letters=True, include_digits=True, include
     return password
 
 def generate_password_with_words(input_words, length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic):
-    # Prepare the base character set for random generation
     characters = ""
     if include_letters:
         characters += string.ascii_letters
@@ -84,14 +83,9 @@ def generate_password_with_words(input_words, length, include_letters, include_d
     if include_sami:
         characters += "ÁáĐđŊŋŠšŽžÅåÄäÖö"  # Sami characters
 
-    # Use the input words as part of the password without modifying them
-    password = ''.join(input_words.split())  # Keep words as they are
+    password = ''.join(input_words.split())
     remaining_length = length - len(password)
-    
-    # Add random characters to meet the total desired length
     random_characters = ''.join(secrets.choice(characters) for _ in range(remaining_length))
-    
-    # Combine input words and random characters, then shuffle
     combined_password = list(password + random_characters)
     random.shuffle(combined_password)
     
@@ -99,10 +93,8 @@ def generate_password_with_words(input_words, length, include_letters, include_d
 
 st.title("Secure password generator with QR code (NO/SE/FI/ICL + Sami)")
 
-# Options for generating the password
 length = st.number_input("Length of password", min_value=1, value=8, step=1)
 
-# Arrange the first three checkboxes on the left and the last three on the right
 col1, col2 = st.columns([1, 2])
 with col1:
     include_letters = st.checkbox("Include letters", value=True)
@@ -114,7 +106,6 @@ with col2:
     include_icelandic = st.checkbox("Include Icelandic characters", value=False)
     include_sami = st.checkbox("Include Sami characters", value=False)
 
-# New option to create password from input words
 use_input_words = st.checkbox("Use input words to create password", value=False)
 input_words = st.text_input("Enter words for password (separate by spaces)") if use_input_words else ""
 
@@ -122,42 +113,48 @@ st.title("Results")
 hide_password = st.checkbox("Hide password", value=False)
 display_qr_code = st.checkbox("Display as QR code", value=False)
 
-if st.button("Generate password"):
+if "password" not in st.session_state:
+    st.session_state.password = ""
+    st.session_state.entropy = 0
+
+def generate_and_display_password():
     if use_input_words and input_words:
-        # Generate password with mixed input words and random characters
         password = generate_password_with_words(input_words, length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
         entropy = calculate_entropy(len(password), include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
     else:
-        # Generate a random password
         entropy = calculate_entropy(length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
         password = generate_password(length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
-    
-    if password:
-        strength = estimate_strength(entropy)
-        if hide_password:
-            password_display = "*" * len(password)
-        else:
-            password_display = password
-        data = {"Generated password": password_display, "Strength": strength, "Entropy (bits)": entropy}
-        st.table(data)
-        
-        if display_qr_code:
-            qr = qrcode.QRCode(version=1, box_size=10, border=5)
-            qr.add_data(password)
-            qr.make(fit=True)
-            img = qr.make_image(fill_color="black", back_color="white")
-            img_bytes = BytesIO()
-            img.save(img_bytes, format='PNG')
-            st.image(img_bytes, caption="Password QR Code", use_column_width=True)
 
-# Recommended guidelines
-st.sidebar.markdown("### Common guidelines")
-st.sidebar.markdown("""
-- Consider a minimum password length of 8 characters as a general guide. Both the US and UK cyber security departments recommend long and easily memorable passwords over short complex ones.
-- Generate passwords randomly where feasible.
-- Avoid using the same password twice (e.g. across multiple user accounts and/or software systems).
-- Avoid character repetition, keyboard patterns, dictionary words, and sequential letters or numbers.
-- Avoid using information that is or might become publicly associated with the user or the account, such as the user name, ancestors' names, or dates.
-- Avoid using information that the user's colleagues and/or acquaintances might know to be associated with the user, such as relatives or pet names, romantic links (current or past), and biographical information (e.g. ID numbers, ancestors' names or dates).
-- Do not use passwords that consist wholly of any simple combination of the aforementioned weak components.
-""")
+    st.session_state.password = password
+    st.session_state.entropy = entropy
+    strength = estimate_strength(entropy)
+
+    if hide_password:
+        password_display = "*" * len(password)
+    else:
+        password_display = password
+
+    data = {"Generated password": password_display, "Strength": strength, "Entropy (bits)": entropy}
+    st.table(data)
+
+    if display_qr_code:
+        qr = qrcode.QRCode(version=1, box_size=10, border=5)
+        qr.add_data(password)
+        qr.make(fit=True)
+        img = qr.make_image(fill_color="black", back_color="white")
+        img_bytes = BytesIO()
+        img.save(img_bytes, format='PNG')
+        st.image(img_bytes, caption="Password QR Code", use_column_width=True)
+
+# Generate Password button
+if st.button("Generate password"):
+    generate_and_display_password()
+
+# Regenerate button
+if st.button("Regenerate"):
+    generate_and_display_password()
+
+# Copy to clipboard button (JavaScript snippet to copy password)
+if st.button("Copy"):
+    st.write(f"<script>navigator.clipboard.writeText('{st.session_state.password}');</script>", unsafe_allow_html=True)
+    st.success("Password copied to clipboard!")
