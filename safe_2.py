@@ -4,9 +4,8 @@ import string
 import math
 import qrcode
 from io import BytesIO
-import random
+import matplotlib.pyplot as plt
 
-# Password entropy calculation function
 def calculate_entropy(length, include_letters=True, include_digits=True, include_punctuation=True, include_specials=False, include_scandinavian=False, include_icelandic=False):
     characters = ""
     if include_letters:
@@ -31,7 +30,6 @@ def calculate_entropy(length, include_letters=True, include_digits=True, include
     entropy = math.log2(N ** length)
     return round(entropy)
 
-# Password strength estimator
 def estimate_strength(entropy):
     if entropy < 28:
         return "Very Weak"
@@ -44,7 +42,6 @@ def estimate_strength(entropy):
     else:
         return "Very Strong"
 
-# Password generator function
 def generate_password(length, include_letters=True, include_digits=True, include_punctuation=True, include_specials=False, include_scandinavian=False, include_icelandic=False):
     characters = ""
     if include_letters:
@@ -69,53 +66,41 @@ def generate_password(length, include_letters=True, include_digits=True, include
     password = ''.join((secrets.choice(characters) for _ in range(length)))
     return password
 
-# UI Elements
+def display_entropy_graph(entropy):
+    strength = estimate_strength(entropy)
+    color_map = {
+        "Very Weak": "red",
+        "Weak": "orange",
+        "Moderate": "yellow",
+        "Strong": "blue",
+        "Very Strong": "green"
+    }
+    color = color_map.get(strength, "gray")
+    
+    # Plot the entropy score
+    fig, ax = plt.subplots(figsize=(6, 3))
+    ax.barh(['Entropy'], [entropy], color=color)
+    ax.set_xlim(0, 128)  # Set x-axis limit based on entropy range
+    ax.set_xlabel("Entropy Score (bits)")
+    ax.set_title(f"Password Strength: {strength}")
+    ax.grid(True, axis='x', linestyle='--', alpha=0.7)
+
+    st.pyplot(fig)
+
 st.title("Secure password generator with QR code (NO/SE/FI/ICL + Sami)")
 
 length = st.number_input("Length of password", min_value=1, value=8, step=1)
 
-# Toggle buttons to select character types
-if "include_letters" not in st.session_state:
-    st.session_state.update({
-        "include_letters": True,
-        "include_digits": True,
-        "include_punctuation": True,
-        "include_specials": False,
-        "include_scandinavian": False,
-        "include_icelandic": False,
-        "include_sami": False
-    })
-
 col1, col2 = st.columns([1, 2])
 with col1:
-    if st.button("Toggle letters"):
-        st.session_state.include_letters = not st.session_state.include_letters
-    st.write(f"Include letters: {'Yes' if st.session_state.include_letters else 'No'}")
-
-    if st.button("Toggle digits"):
-        st.session_state.include_digits = not st.session_state.include_digits
-    st.write(f"Include digits: {'Yes' if st.session_state.include_digits else 'No'}")
-
-    if st.button("Toggle punctuation"):
-        st.session_state.include_punctuation = not st.session_state.include_punctuation
-    st.write(f"Include punctuation: {'Yes' if st.session_state.include_punctuation else 'No'}")
-
+    include_letters = st.checkbox("Include letters", value=True)
+    include_digits = st.checkbox("Include digits", value=True)
+    include_punctuation = st.checkbox("Include punctuation", value=True)
 with col2:
-    if st.button("Toggle special characters"):
-        st.session_state.include_specials = not st.session_state.include_specials
-    st.write(f"Include special characters: {'Yes' if st.session_state.include_specials else 'No'}")
-
-    if st.button("Toggle Scandinavian characters"):
-        st.session_state.include_scandinavian = not st.session_state.include_scandinavian
-    st.write(f"Include Scandinavian characters: {'Yes' if st.session_state.include_scandinavian else 'No'}")
-
-    if st.button("Toggle Icelandic characters"):
-        st.session_state.include_icelandic = not st.session_state.include_icelandic
-    st.write(f"Include Icelandic characters: {'Yes' if st.session_state.include_icelandic else 'No'}")
-
-    if st.button("Toggle Sami characters"):
-        st.session_state.include_sami = not st.session_state.include_sami
-    st.write(f"Include Sami characters: {'Yes' if st.session_state.include_sami else 'No'}")
+    include_specials = st.checkbox("Include special characters", value=False)
+    include_scandinavian = st.checkbox("Include Scandinavian characters", value=False)
+    include_icelandic = st.checkbox("Include Icelandic characters", value=False)
+    include_sami = st.checkbox("Include Sami characters", value=False)
 
 st.title("Results")
 hide_password = st.checkbox("Hide password", value=False)
@@ -126,25 +111,8 @@ if "password" not in st.session_state:
     st.session_state.entropy = 0
 
 def generate_and_display_password():
-    entropy = calculate_entropy(
-        length, 
-        st.session_state.include_letters, 
-        st.session_state.include_digits, 
-        st.session_state.include_punctuation, 
-        st.session_state.include_specials, 
-        st.session_state.include_scandinavian, 
-        st.session_state.include_icelandic
-    )
-    password = generate_password(
-        length, 
-        st.session_state.include_letters, 
-        st.session_state.include_digits, 
-        st.session_state.include_punctuation, 
-        st.session_state.include_specials, 
-        st.session_state.include_scandinavian, 
-        st.session_state.include_icelandic
-    )
-
+    entropy = calculate_entropy(length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
+    password = generate_password(length, include_letters, include_digits, include_punctuation, include_specials, include_scandinavian, include_icelandic)
     st.session_state.password = password
     st.session_state.entropy = entropy
     strength = estimate_strength(entropy)
@@ -156,6 +124,9 @@ def generate_and_display_password():
 
     data = {"Generated password": password_display, "Strength": strength, "Entropy (bits)": entropy}
     st.table(data)
+
+    # Show entropy score graph
+    display_entropy_graph(entropy)
 
     if display_qr_code:
         qr = qrcode.QRCode(version=1, box_size=10, border=5)
