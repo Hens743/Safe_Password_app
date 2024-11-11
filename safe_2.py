@@ -58,7 +58,7 @@ def generate_password(length, include_letters=True, include_digits=True, include
         characters += "áÁðÐéÉíÍóÓúÚýÝþÞ"  # Icelandic characters
     if include_sami:
         characters += "ÁáĐđŊŋŠšŽžÅåÄäÖö"  # Sami characters
-    
+
     if not characters:
         st.error("Please select at least one character type.")
         return
@@ -84,19 +84,18 @@ def generate_password_with_words(input_words, length, include_letters, include_d
     if include_sami:
         characters += "ÁáĐđŊŋŠšŽžÅåÄäÖö"  # Sami characters
 
-    # Add input words to the password
-    password = ''.join(input_words.split())
-    
-    # Calculate remaining length needed for password
+    # Use the input words as part of the password without modifying them
+    password = ''.join(input_words.split())  # Keep words as they are
     remaining_length = length - len(password)
     
     # Add random characters to meet the total desired length
-    password += ''.join(secrets.choice(characters) for _ in range(remaining_length))
+    random_characters = ''.join(secrets.choice(characters) for _ in range(remaining_length))
     
-    # Shuffle to ensure random distribution of input words and characters
-    password = ''.join(random.sample(password, len(password)))
+    # Combine input words and random characters, then shuffle
+    combined_password = list(password + random_characters)
+    random.shuffle(combined_password)
     
-    return password
+    return ''.join(combined_password)
 
 st.title("Secure password generator with QR code (NO/SE/FI/ICL + Sami)")
 
